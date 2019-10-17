@@ -17,6 +17,8 @@ def parse(text):
     expression.  holding multiple top-level parenthesized expressions. Ex: "(baz
     0 (foo 1.5))" becomes ['baz', 0, ['foo', 1.5]].
     """
+
+    text = str(text)
     
     # make sure all of our parenthesis match
     if text.count("(") != text.count(")"):
@@ -53,7 +55,7 @@ def parse(text):
         elif c == "(" and not in_string:
             # recurse into current level of nesting
             cur = result
-            for i in xrange(indent):
+            for i in range(indent):
                 cur = cur[-1]
             
             # add our buffered string onto the previous level, then clear it
@@ -82,7 +84,7 @@ def parse(text):
             # append remaining string buffer before dedenting
             if len(s) > 0:
                 cur = result
-                for i in xrange(indent):
+                for i in range(indent):
                     cur = cur[-1]
                     
                 val = ''.join(s)
@@ -110,7 +112,7 @@ def parse(text):
         # we separate expressions by spaces
         elif c == " " and len(s) > 0:
             cur = result
-            for i in xrange(indent):
+            for i in range(indent):
                 cur = cur[-1]
             
             val = ''.join(s)
@@ -133,7 +135,8 @@ def parse(text):
     # because it makes adding new levels of indentation simpler as it avoids
     # the 'if result is None' corner case that would come up when trying to
     # append the first '('.
-    return result[0]
+
+    return result[1]
 
 if __name__ == "__main__":
     import sys
@@ -143,13 +146,13 @@ if __name__ == "__main__":
            from pprint import pprint
            with open(sys.argv[1], 'r') as f:
                for line in f:
-                   print "raw message:\n", line.strip()
-                   print
-                   print "parsed message:"
+                   print ("raw message:\n", line.strip())
+                   print ()
+                   print ("parsed message:")
                    pprint(parse(line.strip()))
-                   print "----"
-                   raw_input()
-                   print
+                   print ("----")
+                   input ()
+                   print ()
     else:
         # just parse the message file
         with open(sys.argv[1], 'r') as f:

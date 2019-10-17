@@ -132,6 +132,20 @@ class Agent:
         Once an agent has been disconnected, it is 'dead' and cannot be used
         again.  All of its methods get replaced by a method that raises an
         exception every time it is called.
+
+        -Portugues
+
+        Diga aos threads do loop para parar e sinalizar ao servidor que estamos
+        desconectar, em seguida, junte os fios do loop e destrua todo o nosso interior
+        métodos.
+
+        Como o encadeamento do loop de mensagens pode bloquear indefinidamente enquanto
+        aguardando a resposta do servidor, apenas o permitimos (e o loop think
+        por uma boa medida) um curto período de tempo para terminar antes de simplesmente desistir.
+
+        Depois que um agente é desconectado, ele fica "morto" e não pode ser usado
+        novamente. Todos os seus métodos são substituídos por um método que gera uma
+        exceção toda vez que é chamado.
         """
 
         # don't do anything if not connected
@@ -164,6 +178,13 @@ class Agent:
 
         This SHOULD NOT be called externally, since it's used as a threaded loop
         internally by this object.  Calling it externally is a BAD THING!
+
+        -Portugues
+
+        Lida com as mensagens recebidas do servidor.
+
+        Isso NÃO DEVE ser chamado externamente, pois é usado como um loop de thread
+        internamente por esse objeto. Chamá-lo externamente é uma coisa ruim!
         """
 
         # loop until we're told to stop
@@ -189,6 +210,14 @@ class Agent:
 
         Like the message loop, this SHOULD NOT be called externally.  Use the
         play method to start play, and the disconnect method to end it.
+
+        -Portugues
+
+        Realiza a análise do modelo mundial e envia comandos apropriados para o
+        servidor para permitir que o agente participe do jogo atual.
+
+        Como o loop de mensagem, isso NÃO DEVE ser chamado externamente. Use o
+        método play para iniciar a reprodução e o método desconectar para finalizá-la.
         """
 
         while self.__thinking:
@@ -224,8 +253,13 @@ class Agent:
         """
         Performs a single step of thinking for our agent.  Gets called on every
         iteration of our think loop.
-        """
 
+        -Portugues
+
+        Executa uma única etapa de pensamento para o nosso agente. É chamado a cada
+        iteração do nosso loop de pensamento.
+        """
+        
         # DEBUG:  tells us if a thread dies
         if not self.__think_thread.is_alive() or not self.__msg_thread.is_alive():
             raise Exception("A thread died.")
@@ -266,6 +300,7 @@ class Agent:
             return
 
         # determine the enemy goal position
+        # determina a posicao do gol inimigo
         goal_pos = None
         if self.wm.side == WorldModel.SIDE_R:
             goal_pos = (-55, 0)
@@ -275,12 +310,16 @@ class Agent:
         # kick off!
         if self.wm.is_before_kick_off():
             # player 9 takes the kick off
+            # jogador 9 da o primeiro chute
             if self.wm.uniform_number == 9:
+                # se o jogador puder chutar a bola
                 if self.wm.is_ball_kickable():
                     # kick with 100% extra effort at enemy goal
+                    # chute com 100% de esforço extra no gol inimigo
                     self.wm.kick_to(goal_pos, 1.0)
                 else:
                     # move towards ball
+                    # avançar em direção à bola
                     if self.wm.ball is not None:
                         if (self.wm.ball.direction is not None and
                                 -7 <= self.wm.ball.direction <= 7):
@@ -323,7 +362,7 @@ if __name__ == "__main__":
 
     # enforce corrent number of arguments, print help otherwise
     if len(sys.argv) < 3:
-        print "args: ./agent.py <team_name> <num_players>"
+        print ("args: ./agent.py <team_name> <num_players>")
         sys.exit()
 
     def spawn_agent(team_name):
@@ -342,8 +381,8 @@ if __name__ == "__main__":
 
     # spawn all agents as seperate processes for maximum processing efficiency
     agentthreads = []
-    for agent in xrange(min(11, int(sys.argv[2]))):
-        print "  Spawning agent %d..." % agent
+    for agent in range(min(11, int(sys.argv[2]))):
+        print ("  Spawning agent %d..." % agent)
 
         at = mp.Process(target=spawn_agent, args=(sys.argv[1],))
         at.daemon = True
@@ -351,27 +390,27 @@ if __name__ == "__main__":
 
         agentthreads.append(at)
 
-    print "Spawned %d agents." % len(agentthreads)
-    print
-    print "Playing soccer..."
+    print ("Spawned %d agents." % len(agentthreads))
+    print ()
+    print ("Playing soccer...")
 
     # wait until killed to terminate agent processes
     try:
         while 1:
             time.sleep(0.05)
     except KeyboardInterrupt:
-        print
-        print "Killing agent threads..."
+        print ()
+        print ("Killing agent threads...")
 
         # terminate all agent processes
         count = 0
         for at in agentthreads:
-            print "  Terminating agent %d..." % count
+            print ("  Terminating agent %d..." % count)
             at.terminate()
             count += 1
-        print "Killed %d agent threads." % (count - 1)
+        print ("Killed %d agent threads." % (count - 1))
 
-        print
-        print "Exiting."
+        print ()
+        print ("Exiting.")
         sys.exit()
 

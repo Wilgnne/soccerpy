@@ -9,6 +9,10 @@ class WorldModel:
     """
     Holds and updates the model of the world as known from current and past
     data.
+    
+    -Portugues
+    Detém e atualiza o modelo do mundo conhecido como atual e passado
+    dados.
     """
 
     # constants for team sides
@@ -19,6 +23,10 @@ class WorldModel:
         """
         Acts as a static class containing variables for all valid play modes.
         The string values correspond to what the referee calls the game modes.
+        
+        -Portugues
+        Atua como uma classe estática contendo variáveis ​​para todos os modos de reprodução válidos.
+        Os valores das strings correspondem ao que o árbitro chama de modos de jogo.
         """
 
         BEFORE_KICK_OFF = "before_kick_off"
@@ -45,6 +53,9 @@ class WorldModel:
     class RefereeMessages:
         """
         Static class containing possible non-mode messages sent by a referee.
+
+        -Portugues
+        Classe estática contendo possíveis mensagens não relacionadas ao modo enviadas por um árbitro.
         """
 
         # these are referee messages, not play modes
@@ -71,6 +82,10 @@ class WorldModel:
         """
         Create the world model with default values and an ActionHandler class it
         can use to complete requested actions.
+
+        -Portugues
+        Crie o modelo mundial com valores padrão e uma classe ActionHandler que
+        pode ser usado para concluir as ações solicitadas.
         """
 
         # we use the action handler to complete complex commands
@@ -135,6 +150,11 @@ class WorldModel:
         Determines absolute view angle for the player given a list of visible
         flags.  We find the absolute angle to each flag, then return the average
         of those angles.  Returns 'None' if no angle could be determined.
+
+        -Portugues
+        Determina o ângulo de visão absoluto para o jogador, dada uma lista de
+        bandeiras. Encontramos o ângulo absoluto para cada bandeira e retornamos a média
+        desses ângulos. Retorna 'Nenhum' se nenhum ângulo puder ser determinado.
         """
 
         # average all flag angles together and save that as absolute angle
@@ -158,6 +178,12 @@ class WorldModel:
         to all flags in the flag list given.  'angle_step' specifies the
         increments between angles for projecting points onto the circle
         surrounding a flag.
+
+        -Portuges
+        Retorna uma posição de melhor estimativa com base na triangulação por distâncias
+        a todas as bandeiras na lista de bandeiras fornecida. 'angle_step' especifica o
+        incrementos entre ângulos para projetar pontos no círculo
+        em torno de uma bandeira.
         """
 
         points = []
@@ -168,7 +194,7 @@ class WorldModel:
 
             # generate points every 'angle_step' degrees around each flag,
             # discarding those off-field.
-            for i in xrange(0, 360, angle_step):
+            for i in range(0, 360, angle_step):
                 dy = f.distance * math.sin(math.radians(i))
                 dx = f.distance * math.cos(math.radians(i))
 
@@ -202,11 +228,16 @@ class WorldModel:
         Cluster a set of points into a dict of centers mapped to point lists.
         Uses the k-means clustering algorithm with random initial centers and a
         fixed number of iterations to find clusters.
+
+        -Portugues
+        Agrupe um conjunto de pontos em um ditado de centros mapeados para listas de pontos.
+        Utiliza o algoritmo de agrupamento k-means com centros iniciais aleatórios e um
+        número fixo de iterações para encontrar clusters.
         """
 
         # generate initial random centers, ignoring identical ones
         centers = set([])
-        for i in xrange(int(math.sqrt(len(points) / 2))):
+        for i in range(int(math.sqrt(len(points) / 2))):
             # a random coordinate somewhere within the field boundaries
             rand_center = (random.randint(-55, 55), random.randint(-35, 35))
             centers.add(rand_center)
@@ -214,7 +245,7 @@ class WorldModel:
         # cluster for some iterations before the latest result
         latest = {}
         cur = {}
-        for i in xrange(num_cluster_iterations):
+        for i in range(num_cluster_iterations):
             # initialze cluster lists
             for c in centers:
                 cur[c] = []
@@ -261,6 +292,9 @@ class WorldModel:
     def euclidean_distance(self, point1, point2):
         """
         Returns the Euclidean distance between two points on a plane.
+        
+        -Portugues
+        Retorna a distância euclidiana entre dois pontos no plano.
         """
 
         x1 = point1[0]
@@ -276,6 +310,12 @@ class WorldModel:
         these points exist on a plane, and that the positive x-axis is 0 degrees
         and the positive y-axis is 90 degrees.  All returned angles are positive
         and relative to the positive x-axis.
+
+        -Portugues
+        Retorna o ângulo do primeiro ponto ao segundo, assumindo que
+        esses pontos existem em um plano e que o eixo x positivo é 0 graus
+        e o eixo y positivo é de 90 graus. Todos os ângulos retornados são positivos
+        e em relação ao eixo x positivo.
         """
 
         x1 = point1[0]
@@ -299,6 +339,11 @@ class WorldModel:
         Update any internal variables based on the currently available
         information.  This also calculates information not available directly
         from server-reported messages, such as player coordinates.
+
+        -Portugues
+        Atualize todas as variáveis ​​internas com base nas opções disponíveis no momento
+        em formação. Isso também calcula informações não disponíveis diretamente
+        de mensagens relatadas pelo servidor, como coordenadas do jogador.
         """
 
         # update basic information
@@ -326,6 +371,9 @@ class WorldModel:
     def is_before_kick_off(self):
         """
         Tells us whether the game is in a pre-kickoff state.
+
+        -Portugues
+        Nos diz se o jogo está em um estado pré-kickoff.
         """
 
         return self.play_mode == WorldModel.PlayModes.BEFORE_KICK_OFF
@@ -333,12 +381,15 @@ class WorldModel:
     def is_kick_off_us(self):
         """
         Tells us whether it's our turn to kick off.
+        
+        -Portugues
+        Diz-nos se é a nossa vez de começar.
         """
 
         ko_left = WorldModel.PlayModes.KICK_OFF_L
         ko_right = WorldModel.PlayModes.KICK_OFF_R
 
-        print self.play_mode
+        print (self.play_mode)
 
         # return whether we're on the side that's kicking off
         return (self.side == WorldModel.SIDE_L and self.play_mode == ko_left or
@@ -348,6 +399,10 @@ class WorldModel:
         """
         Returns whether the ball is in the other team's posession and it's a
         free kick, corner kick, or kick in.
+
+        -Portugues
+        Retorna se a bola está na posse do outro time e se é um
+        chute livre, escanteio ou chute.
         """
 
         # shorthand for verbose constants
@@ -372,6 +427,9 @@ class WorldModel:
     def is_ball_kickable(self):
         """
         Tells us whether the ball is in reach of the current player.
+
+        -Portugues
+        Diz-nos se a bola está ao alcance do jogador atual.
         """
 
         # ball must be visible, not behind us, and within the kickable margin
@@ -382,6 +440,9 @@ class WorldModel:
     def get_ball_speed_max(self):
         """
         Returns the maximum speed the ball can be kicked at.
+
+        -Portugues
+        Retorna a velocidade máxima em que a bola pode ser chutada.
         """
 
         return self.server_parameters.ball_speed_max
@@ -391,6 +452,11 @@ class WorldModel:
         Kick the ball to some point with some extra-power factor added on.
         extra_power=0.0 means the ball should stop at the given point, anything
         higher means it should have proportionately more speed.
+
+        -Portugues
+        Chute a bola para algum ponto com algum fator de potência extra adicionado.
+        extra_power = 0.0 significa que a bola deve parar no ponto especificado, qualquer coisa
+        maior significa que ele deve ter proporcionalmente mais velocidade.
         """
 
         # how far are we from the desired point?
@@ -429,6 +495,10 @@ class WorldModel:
         """
         Returns the effective power of a kick given a ball object.  See formula
         4.21 in the documentation for more details.
+
+        -Portugues
+        Retorna o poder efetivo de um chute dado um objeto de bola. Ver fórmula
+        4.21 na documentação para mais detalhes.
         """
 
         # we can't calculate if we don't have a distance to the ball
@@ -453,6 +523,9 @@ class WorldModel:
     def turn_neck_to_object(self, obj):
         """
         Turns the player's neck to a given object.
+
+        -Portugues
+        Vira o pescoço do jogador para um determinado objeto.
         """
 
         self.ah.turn_neck(obj.direction)
@@ -461,6 +534,10 @@ class WorldModel:
         """
         Returns the linear distance to some point on the field from the current
         point.
+
+        -Portugues
+        Retorna a distância linear para algum ponto no campo apartir
+        do ponto atual.
         """
 
         return self.euclidean_distance(self.abs_coords, point)
@@ -468,6 +545,9 @@ class WorldModel:
     def turn_body_to_point(self, point):
         """
         Turns the agent's body to face a given point on the field.
+
+        -Portugues
+        Vira o corpo do agente para enfrentar um determinado ponto no campo.
         """
 
         # calculate absolute direction to point
@@ -484,6 +564,11 @@ class WorldModel:
         Determines the absolute coordinates of the given object based on the
         agent's current position.  Returns None if the coordinates can't be
         calculated.
+
+        -Portugues
+        Determina as coordenadas absolutas do objeto especificado com base no
+        posição atual do agente. Retorna Nenhum se as coordenadas não puderem ser
+        calculado.
         """
 
         # we can't calculate this without a distance to the object
@@ -500,6 +585,9 @@ class WorldModel:
     def teleport_to_point(self, point):
         """
         Teleports the player to a given (x, y) point using the 'move' command.
+
+        -Portuges
+        Teleporta o jogador para um determinado ponto (x, y) usando o comando 'mover'.
         """
 
         self.ah.move(point[0], point[1])
@@ -508,6 +596,10 @@ class WorldModel:
         """
         Turns the player's neck to be in line with its body, making the angle
         between the two 0 degrees.
+
+        -Portugues
+        Gira o pescoço do jogador para ficar alinhado com o corpo, fazendo o ângulo
+        entre os dois 0 graus.
         """
 
         # neck angle is relative to body, so we turn it back the inverse way
@@ -517,6 +609,9 @@ class WorldModel:
     def get_nearest_teammate_to_point(self, point):
         """
         Returns the uniform number of the fastest teammate to some point.
+
+        -Portugues
+        Retorna o número uniforme do companheiro de equipe mais rápido em algum momento.
         """
 
         # holds tuples of (player dist to point, player)
@@ -538,6 +633,9 @@ class WorldModel:
     def get_stamina(self):
         """
         Returns the agent's current stamina amount.
+
+        -Portugues
+        Retorna a quantidade de resistência atual do agente.
         """
 
         return self.stamina
@@ -545,6 +643,9 @@ class WorldModel:
     def get_stamina_max(self):
         """
         Returns the maximum amount of stamina a player can have.
+
+        -Portugues
+        Retorna a quantidade máxima de resistência que um jogador pode ter.
         """
 
         return self.server_parameters.stamina_max
@@ -552,6 +653,9 @@ class WorldModel:
     def turn_body_to_object(self, obj):
         """
         Turns the player's body to face a particular object.
+
+        -Portugues
+        Vira o corpo do jogador para direção de um objeto em particular.
         """
 
         self.ah.turn(obj.direction)

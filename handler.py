@@ -1,5 +1,5 @@
 import collections
-import Queue as queue
+import queue as queue
 
 import message_parser
 import sp_exceptions
@@ -39,7 +39,7 @@ class MessageHandler:
         parsed = message_parser.parse(msg)
 
         if PRINT_SERVER_MESSAGES:
-            print parsed[0] + ":", parsed[1:], "\n"
+            print (parsed[0] + ":", parsed[1:], "\n")
 
         # this is the name of the function that should be used to handle
         # this message type.  we pull it from this object dynamically to
@@ -390,7 +390,7 @@ class MessageHandler:
         """
 
         m = "Server issued a warning: '%s'" % msg[1]
-        print sp_exceptions.SoccerServerWarning(m)
+        print (sp_exceptions.SoccerServerWarning(m))
 
 class ActionHandler:
     """
@@ -459,7 +459,7 @@ class ActionHandler:
             # send other commands immediately
             else:
                 if PRINT_SENT_COMMANDS:
-                    print "sent:", cmd.text, "\n"
+                    print ("sent:", cmd.text, "\n")
 
                 self.sock.send(cmd.text)
 
@@ -469,7 +469,7 @@ class ActionHandler:
         # send the saved primary command, if there was one
         if primary_cmd is not None:
             if PRINT_SENT_COMMANDS:
-                print "sent:", primary_cmd.text, "\n"
+                print ("sent:", primary_cmd.text, "\n")
 
             self.sock.send(primary_cmd.text)
 

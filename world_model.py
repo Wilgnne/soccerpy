@@ -1,9 +1,9 @@
 import math
 import random
 
-import soccerpy.message_parser
-import soccerpy.sp_exceptions
-import soccerpy.game_object
+import soccerpy.message_parser as message_parser
+import soccerpy.sp_exceptions as sp_exceptions
+import soccerpy.game_object as game_object
 
 class WorldModel:
     """

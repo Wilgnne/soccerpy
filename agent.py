@@ -4,9 +4,9 @@ import threading
 import time
 import random
 
-import soccerpy.sock
-import soccerpy.sp_exceptions
-import soccerpy.handler
+import soccerpy.sock as sock
+import soccerpy.sp_exceptions as sp_exceptions
+import soccerpy.handler as handler
 from soccerpy.world_model import WorldModel
 
 class Agent:

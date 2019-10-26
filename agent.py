@@ -364,6 +364,23 @@ class Agent:
 
                 return
 
+def spawn_agent(team_name):
+    """
+    Used to run an agent in a seperate physical process.
+
+    Usado para rodar os agenter em processos separados
+    """
+
+    a = Agent()
+    a.connect("localhost", 6000, team_name)
+    a.play()
+
+    # we wait until we're killed
+    # esperamos ate o processo ser morto
+    while 1:
+        # we sleep for a good while since we can only exit if terminated.
+        # dormimos um bom tempo, pois só podemos sair se terminarmos.
+        time.sleep(1)
 
 if __name__ == "__main__":
     import sys
@@ -373,24 +390,6 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print ("args: ./agent.py <team_name> <num_players>")
         sys.exit()
-
-    def spawn_agent(team_name):
-        """
-        Used to run an agent in a seperate physical process.
-
-        Usado para rodar os agenter em processos separados
-        """
-
-        a = Agent()
-        a.connect("localhost", 6000, team_name)
-        a.play()
-
-        # we wait until we're killed
-        # esperamos ate o processo ser morto
-        while 1:
-            # we sleep for a good while since we can only exit if terminated.
-            # dormimos um bom tempo, pois só podemos sair se terminarmos.
-            time.sleep(1)
 
     # spawn all agents as seperate processes for maximum processing efficiency
     # gerar todos os agentes como processos separados para máxima eficiência de processamento

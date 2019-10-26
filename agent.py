@@ -364,15 +364,15 @@ class Agent:
 
                 return
 
-def spawn_agent(team_name):
+def spawn_agent(agentClass:Agent, team_name:str, host:str="localhost", port:int=6000):
     """
     Used to run an agent in a seperate physical process.
 
     Usado para rodar os agenter em processos separados
     """
 
-    a = Agent()
-    a.connect("localhost", 6000, team_name)
+    a = agentClass()
+    a.connect(host, port, team_name)
     a.play()
 
     # we wait until we're killed
@@ -397,7 +397,7 @@ if __name__ == "__main__":
     for agent in range(min(11, int(sys.argv[2]))):
         print ("  Spawning agent %d..." % agent)
 
-        at = mp.Process(target=spawn_agent, args=(sys.argv[1],))
+        at = mp.Process(target=spawn_agent, args=(Agent ,sys.argv[1],))
         at.daemon = True
         at.start()
 

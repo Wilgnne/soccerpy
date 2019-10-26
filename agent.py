@@ -364,14 +364,14 @@ class Agent:
 
                 return
 
-def spawn_agent(agentClass:Agent, team_name:str, host:str="localhost", port:int=6000, *args):
+def spawn_agent(agentClass:Agent, team_name:str, host:str="localhost", port:int=6000, **kwargs):
     """
     Used to run an agent in a seperate physical process.
 
     Usado para rodar os agenter em processos separados
     """
 
-    a = agentClass(*args)
+    a = agentClass(**kwargs)
     a.connect(host, port, team_name)
     a.play()
 

@@ -334,23 +334,32 @@ class Agent:
                 return
 
         # attack!
+        #Se o jogo ja começou, ATAQUE
         else:
             # find the ball
+            # Procure a bola
             if self.wm.ball is None or self.wm.ball.direction is None:
+                # Se não achar gire 30 graus
                 self.wm.ah.turn(30)
 
                 return
 
             # kick it at the enemy goal
+            # Se achar chute e der para chutar
             if self.wm.is_ball_kickable():
+                # Chute
                 self.wm.kick_to(goal_pos, 1.0)
                 return
+            # Se nao der para chutar
             else:
                 # move towards ball
+                # Vá ate a bola e cheque se voce esta alinhado com ela
                 if -7 <= self.wm.ball.direction <= 7:
+                    # Se sim chute
                     self.wm.ah.dash(65)
                 else:
                     # face ball
+                    # Se nao gire em direção a ela
                     self.wm.ah.turn(self.wm.ball.direction / 2)
 
                 return
@@ -368,6 +377,8 @@ if __name__ == "__main__":
     def spawn_agent(team_name):
         """
         Used to run an agent in a seperate physical process.
+
+        Usado para rodar os agenter em processos separados
         """
 
         a = Agent()
@@ -375,11 +386,14 @@ if __name__ == "__main__":
         a.play()
 
         # we wait until we're killed
+        # esperamos ate o processo ser morto
         while 1:
             # we sleep for a good while since we can only exit if terminated.
+            # dormimos um bom tempo, pois só podemos sair se terminarmos.
             time.sleep(1)
 
     # spawn all agents as seperate processes for maximum processing efficiency
+    # gerar todos os agentes como processos separados para máxima eficiência de processamento
     agentthreads = []
     for agent in range(min(11, int(sys.argv[2]))):
         print ("  Spawning agent %d..." % agent)
@@ -395,6 +409,7 @@ if __name__ == "__main__":
     print ("Playing soccer...")
 
     # wait until killed to terminate agent processes
+    # aguarde até que seja morto para finalizar os processos do agente
     try:
         while 1:
             time.sleep(0.05)
